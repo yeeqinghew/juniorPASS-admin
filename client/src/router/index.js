@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import AdminLandingLayout from "../layout/AdminLandingLayout";
 import AdminHomeLayout from "../layout/AdminHomeLayout";
 import AdminLogin from "../components/Login";
@@ -14,7 +14,8 @@ const Routers = () => {
         type="text/css"
       ></link>
       <Routes>
-        <Route path="/admin/*" element={<AdminLandingLayout />}>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/*" element={<AdminLandingLayout />}>
           <Route path="login" element={<AdminLogin />}></Route>
           <Route element={<AdminHomeLayout />}>
             <Route path="home" element={<AdminHome />}></Route>
