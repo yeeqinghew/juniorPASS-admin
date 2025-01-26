@@ -1,30 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Table, message } from "antd";
 import toast from "react-hot-toast";
 
-const AdminHome = () => {
-  useEffect(() => {
-    async function getAllUsers() {
-      try {
-        const response = await fetch(
-          "http://localhost:5000/admins/getAllUsers",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const parseRes = await response.json();
-      } catch (err) {
-        console.error(err.message);
-        toast.error("ERROR in /admins/getAllUsers");
-      }
-    }
-
-    getAllUsers();
-  }, []);
-  return <>Users</>;
+const Home = () => {
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>Dashboard</h1>
+    </div>
+  );
 };
 
-export default AdminHome;
+export default Home;

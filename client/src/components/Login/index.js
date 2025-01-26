@@ -97,7 +97,7 @@ const AdminLogin = () => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your usernmae!",
+                  message: "Please input your username!",
                 },
               ]}
             >

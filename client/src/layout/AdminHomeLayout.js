@@ -4,12 +4,14 @@ import {
   UserOutlined,
   VideoCameraOutlined,
   LogoutOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Image, Divider } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 
 const AdminHomeLayout = () => {
+  const navigate = useNavigate();
   return (
     <Layout
       style={{
@@ -47,31 +49,42 @@ const AdminHomeLayout = () => {
           mode="inline"
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["1"]}
+          onClick={({ key }) => {
+            if (key === "1") navigate("/home"); // Dashboard route
+            if (key === "3") navigate("/parents"); // Parents list
+            if (key === "4") navigate("/children"); // Children list
+            if (key === "5") navigate("/partners"); // Partners list
+          }}
           items={[
             {
               key: "1",
+              icon: <HomeOutlined />,
+              label: "Dashboard",
+            },
+            {
+              key: "2",
               icon: <UserOutlined />,
-              label: "users",
+              label: "Users",
               children: [
                 {
-                  key: "2",
-                  label: "parents",
+                  key: "3",
+                  label: "Parents",
                 },
                 {
-                  key: "3",
-                  label: "children",
+                  key: "4",
+                  label: "Children",
                 },
               ],
             },
             {
-              key: "4",
+              key: "5",
               icon: <VideoCameraOutlined />,
-              label: "partners",
+              label: "Partners",
             },
             {
-              key: "5",
+              key: "6",
               icon: <UploadOutlined />,
-              label: "transactions",
+              label: "Transactions",
             },
           ]}
           style={{

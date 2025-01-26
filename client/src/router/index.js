@@ -3,7 +3,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import AdminLandingLayout from "../layout/AdminLandingLayout";
 import AdminHomeLayout from "../layout/AdminHomeLayout";
 import AdminLogin from "../components/Login";
-import AdminHome from "../components/Home";
+import Home from "../components/Home";
+import Partners from "../components/Partners";
+import Parents from "../components/Users/Parents";
+import Children from "../components/Users/Children";
 
 const Routers = () => {
   return (
@@ -18,7 +21,10 @@ const Routers = () => {
         <Route path="/*" element={<AdminLandingLayout />}>
           <Route path="login" element={<AdminLogin />}></Route>
           <Route element={<AdminHomeLayout />}>
-            <Route path="home" element={<AdminHome />}></Route>
+            <Route path="home" element={<Home />}></Route>
+            <Route path="parents" element={<Parents />}></Route>
+            <Route path="children" element={<Children />}></Route>
+            <Route path="partners" element={<Partners />}></Route>
           </Route>
         </Route>
       </Routes>
