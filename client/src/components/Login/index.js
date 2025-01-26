@@ -16,7 +16,7 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const handleLogin = async (values) => {
     try {
-      const response = await fetch("http://localhost:5000/admin/login", {
+      const response = await fetch("http://localhost:5000/admins/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,8 +27,8 @@ const AdminLogin = () => {
       const parseRes = await response.json();
       if (parseRes.token) {
         localStorage.setItem("token", parseRes.token);
-        // to /admin/home
-        navigate("/admin/home");
+        // to /home
+        navigate("/home");
         toast.success("Login successfully");
       } else {
         toast.error("Wrong credential");

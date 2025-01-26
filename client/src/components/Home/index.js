@@ -6,7 +6,7 @@ const AdminHome = () => {
     async function getAllUsers() {
       try {
         const response = await fetch(
-          "http://localhost:5000/admin/getAllUsers",
+          "http://localhost:5000/admins/getAllUsers",
           {
             method: "GET",
             headers: {
@@ -18,7 +18,7 @@ const AdminHome = () => {
         const parseRes = await response.json();
       } catch (err) {
         console.error(err.message);
-        toast.error("ERROR in /admin/getAllUsers");
+        toast.error("ERROR in /admins/getAllUsers");
       }
     }
 
