@@ -48,12 +48,19 @@ const AdminLogin = () => {
           alignItems: "center",
           height: "100vh",
           margin: "auto",
+          background: "#f8f9fa",
         }}
       >
         <div
           style={{
-            width: "300px",
+            width: "460px",
+            padding: "48px",
+            background: "#ffffff",
+            borderRadius: "16px",
+            border: "1px solid #e5e7eb",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
           }}
+          className="fade-in"
         >
           <Toaster />
           <div
@@ -61,17 +68,30 @@ const AdminLogin = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              marginBottom: "32px",
             }}
           >
             <Image
               src={require("../../images/logopngResize.png")}
               preview={false}
-              style={{
-                margin: 8,
-                width: "auto",
-              }}
+              width={100}
             />
           </div>
+
+          <Title
+            level={2}
+            style={{
+              textAlign: "center",
+              marginBottom: "8px",
+              color: "#1e293b",
+              fontWeight: "700",
+            }}
+          >
+            Admin Portal
+          </Title>
+          <p style={{ textAlign: "center", color: "#64748b", marginBottom: "40px", fontSize: "15px" }}>
+            Sign in to manage your platform
+          </p>
 
           <Form
             name="normal_login"
@@ -79,19 +99,8 @@ const AdminLogin = () => {
             initialValues={{
               remember: true,
             }}
-            style={{
-              maxWidth: "300px",
-            }}
             onFinish={handleLogin}
           >
-            <Title
-              level={3}
-              style={{
-                textAlign: "center",
-              }}
-            >
-              Admin portal
-            </Title>
             <Form.Item
               name="username"
               rules={[
@@ -102,12 +111,18 @@ const AdminLogin = () => {
               ]}
             >
               <Input
-                prefix={<MailOutlined className="site-form-item-icon" />}
+                prefix={<MailOutlined style={{ color: "#94a3b8" }} />}
                 placeholder="Username"
-                size={"large"}
-                required
+                size="large"
+                style={{
+                  borderRadius: "12px",
+                  fontSize: "16px",
+                  padding: "12px 16px",
+                  border: "1px solid #e5e7eb",
+                }}
               />
             </Form.Item>
+
             <Form.Item
               name="password"
               rules={[
@@ -118,23 +133,38 @@ const AdminLogin = () => {
               ]}
             >
               <Input.Password
-                prefix={<LockOutlined className="site-form-item-icon" />}
+                prefix={<LockOutlined style={{ color: "#94a3b8" }} />}
                 type="password"
                 placeholder="Password"
-                size={"large"}
+                size="large"
+                style={{
+                  borderRadius: "12px",
+                  fontSize: "16px",
+                  padding: "12px 16px",
+                  border: "1px solid #e5e7eb",
+                }}
                 iconRender={(visible) =>
-                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                  visible ? <EyeTwoTone twoToneColor="#98BDD2" /> : <EyeInvisibleOutlined />
                 }
-                required
               />
             </Form.Item>
-            <Form.Item>
+
+            <Form.Item style={{ marginTop: "32px" }}>
               <Button
                 type="primary"
                 htmlType="submit"
-                style={{ borderRadius: "0", width: "100%", margin: "12px 0" }}
+                size="large"
+                block
+                style={{
+                  borderRadius: "12px",
+                  height: "52px",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  background: "#98BDD2",
+                  border: "none",
+                }}
               >
-                Log in
+                Sign In
               </Button>
             </Form.Item>
           </Form>

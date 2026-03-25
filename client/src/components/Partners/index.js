@@ -125,14 +125,16 @@ const Partners = () => {
     async function fetchPartners() {
       setLoading(true);
       try {
+        const token = localStorage.getItem("token");
         const response = await fetch(
           "http://localhost:5000/admins/getAllPartners",
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -154,21 +156,51 @@ const Partners = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Partners List</h1>
-      <Table
-        columns={columns}
-        dataSource={partners.map((partner) => ({
-          ...partner,
-          key: partner.partner_id,
-        }))}
-        loading={loading}
-        bordered
-        pagination={{ pageSize: 5 }} // Pagination with 5 items per page
-        onChange={(pagination, filters, sorter) => {
-          console.log("Params", pagination, filters, sorter);
+    <div>
+      <div style={{ marginBottom: "32px" }}>
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "28px",
+            fontWeight: "700",
+            color: "#1e293b",
+          }}
+        >
+          Partners
+        </h1>
+        <p style={{ margin: "8px 0 0 0", color: "#64748b", fontSize: "15px" }}>
+          Manage all partner organizations
+        </p>
+      </div>
+
+      <div
+        style={{
+          background: "#ffffff",
+          borderRadius: "16px",
+          padding: "28px",
+          border: "1px solid #e5e7eb",
+          boxShadow: "0 2px 12px rgba(0, 0, 0, 0.06)",
         }}
-      />
+      >
+        <Table
+          columns={columns}
+          dataSource={partners.map((partner) => ({
+            ...partner,
+            key: partner.partner_id,
+          }))}
+          loading={loading}
+          bordered={false}
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} of ${total} partners`,
+          }}
+          onChange={(pagination, filters, sorter) => {
+            console.log("Params", pagination, filters, sorter);
+          }}
+        />
+      </div>
     </div>
   );
 };
