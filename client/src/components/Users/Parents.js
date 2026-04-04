@@ -47,11 +47,11 @@ const Parents = () => {
       sorter: (a, b) => a.phone_number.localeCompare(b.phone_number), // Sorting by Phone Number
     },
     {
-      title: "Created On",
-      dataIndex: "created_on",
-      key: "created_on",
+      title: "Created At",
+      dataIndex: "created_at",
+      key: "created_at",
       render: (text) => new Date(text).toLocaleString(),
-      sorter: (a, b) => new Date(a.created_on) - new Date(b.created_on), // Sorting by Created On
+      sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at), // Sorting by Created On
     },
   ];
 

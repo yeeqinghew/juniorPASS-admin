@@ -40,8 +40,9 @@ const PartnerEnquiries = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -68,7 +69,7 @@ const PartnerEnquiries = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -97,9 +98,7 @@ const PartnerEnquiries = () => {
       width: 120,
       render: (responded) => (
         <Tag
-          icon={
-            responded ? <CheckCircleOutlined /> : <ClockCircleOutlined />
-          }
+          icon={responded ? <CheckCircleOutlined /> : <ClockCircleOutlined />}
           color={responded ? "success" : "warning"}
         >
           {responded ? "Responded" : "Pending"}
@@ -242,11 +241,7 @@ const PartnerEnquiries = () => {
               okText="Yes"
               cancelText="No"
             >
-              <Button
-                type="primary"
-                icon={<CheckOutlined />}
-                size="small"
-              >
+              <Button type="primary" icon={<CheckOutlined />} size="small">
                 Done
               </Button>
             </Popconfirm>
@@ -409,13 +404,17 @@ const PartnerEnquiries = () => {
                 <div>
                   <Text type="secondary">Submitted On:</Text>
                   <br />
-                  <Text>{new Date(selectedEnquiry.created_at).toLocaleString()}</Text>
+                  <Text>
+                    {new Date(selectedEnquiry.created_at).toLocaleString()}
+                  </Text>
                 </div>
                 {selectedEnquiry.updated_at && (
                   <div>
                     <Text type="secondary">Last Updated:</Text>
                     <br />
-                    <Text>{new Date(selectedEnquiry.updated_at).toLocaleString()}</Text>
+                    <Text>
+                      {new Date(selectedEnquiry.updated_at).toLocaleString()}
+                    </Text>
                   </div>
                 )}
               </Space>
