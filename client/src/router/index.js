@@ -7,6 +7,7 @@ import Home from "../components/Home";
 import Partners from "../components/Partners";
 import Parents from "../components/Users/Parents";
 import Children from "../components/Users/Children";
+import PartnerEnquiries from "../components/PartnerEnquiries";
 
 const Routers = () => {
   return (
@@ -25,6 +26,7 @@ const Routers = () => {
             <Route path="parents" element={<Parents />}></Route>
             <Route path="children" element={<Children />}></Route>
             <Route path="partners" element={<Partners />}></Route>
+            <Route path="partner-enquiries" element={<PartnerEnquiries />}></Route>
           </Route>
         </Route>
       </Routes>

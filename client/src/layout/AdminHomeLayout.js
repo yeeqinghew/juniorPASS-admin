@@ -9,6 +9,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   ShopOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Image, Divider, Badge, Avatar, Typography, Space } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -67,10 +68,11 @@ const AdminHomeLayout = () => {
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={!collapsed ? ["2"] : []}
           onClick={({ key }) => {
-            if (key === "1") navigate("/home");
-            if (key === "3") navigate("/parents");
-            if (key === "4") navigate("/children");
-            if (key === "5") navigate("/partners");
+            if (key === "1") navigate("/home"); // Dashboard route
+            if (key === "3") navigate("/parents"); // Parents list
+            if (key === "4") navigate("/children"); // Children list
+            if (key === "5") navigate("/partners"); // Partners list
+            if (key === "7") navigate("/partner-enquiries"); // Partner Enquiries
           }}
           items={[
             {
@@ -99,6 +101,11 @@ const AdminHomeLayout = () => {
               key: "5",
               icon: <ShopOutlined style={{ fontSize: "20px", color: "#64748b" }} />,
               label: <span style={{ fontSize: "16px", fontWeight: "500" }}>Partners</span>,
+            },
+            {
+              key: "7",
+              icon: <FormOutlined />,
+              label: "Partner Enquiries",
             },
             {
               key: "6",
