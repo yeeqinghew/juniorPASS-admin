@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AdminLandingLayout from "../layout/AdminLandingLayout";
 import AdminHomeLayout from "../layout/AdminHomeLayout";
@@ -26,7 +25,10 @@ const Routers = () => {
             <Route path="parents" element={<Parents />}></Route>
             <Route path="children" element={<Children />}></Route>
             <Route path="partners" element={<Partners />}></Route>
-            <Route path="partner-enquiries" element={<PartnerEnquiries />}></Route>
+            <Route
+              path="partner-enquiries"
+              element={<PartnerEnquiries />}
+            ></Route>
           </Route>
         </Route>
       </Routes>

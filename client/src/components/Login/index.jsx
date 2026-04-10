@@ -9,6 +9,7 @@ import {
 import { Button, Form, Input, Typography } from "antd";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import logo from "../../images/logopngResize.png";
 
 const { Title } = Typography;
 
@@ -72,7 +73,7 @@ const AdminLogin = () => {
             }}
           >
             <Image
-              src={require("../../images/logopngResize.png")}
+              src={logo}
               preview={false}
               width={100}
             />

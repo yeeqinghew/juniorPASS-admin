@@ -11,8 +11,10 @@ import {
   ShopOutlined,
   FormOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Image, Divider, Badge, Avatar, Typography, Space } from "antd";
+import { Layout, Menu, Image, Badge, Avatar, Typography, Space } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
+import logo from "../images/logopngResize.png";
+
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
 
@@ -55,7 +57,7 @@ const AdminHomeLayout = () => {
           }}
         >
           <Image
-            src={require("../images/logopngResize.png")}
+            src={logo}
             preview={false}
             width={collapsed ? 40 : 80}
             style={{ transition: "all 0.3s" }}
