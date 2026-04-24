@@ -8,12 +8,14 @@ import {
   Typography,
   Space,
   Alert,
+  Divider,
 } from "antd";
 import {
   MailOutlined,
   SendOutlined,
   ShopOutlined,
-  CheckCircleOutlined,
+  InfoCircleOutlined,
+  ArrowLeftOutlined,
 } from "@ant-design/icons";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
@@ -51,7 +53,7 @@ const CreatePartner = () => {
 
       form.resetFields();
 
-      // Optionally redirect after a delay
+      // Redirect after success
       setTimeout(() => {
         navigate("/partners");
       }, 2000);
@@ -65,27 +67,32 @@ const CreatePartner = () => {
 
   return (
     <div className="page-container">
-      <div className="page-header">
-        <Title level={2} className="page-title">
+      {/* Header */}
+      <div className="page-header-left">
+        <Button
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate("/partners")}
+          style={{ marginBottom: 16 }}
+        >
+          Back to Partners
+        </Button>
+        <Title level={2} className="page-title" style={{ marginBottom: 8 }}>
           Invite New Partner
         </Title>
-        <Text className="page-subtitle">
+        <Text className="page-subtitle" style={{ display: "block", marginBottom: 24 }}>
           Send an invitation email to onboard a new partner organization
         </Text>
       </div>
 
-      <div className="invitation-form-container">
-        <Card className="invitation-card">
-          <div className="invitation-icon-wrapper">
-            <MailOutlined className="invitation-icon" />
-          </div>
-
-          <Title level={3} className="invitation-title">
-            Send Partner Invitation
+      {/* Main Content - Left Aligned */}
+      <div className="invitation-content-wrapper">
+        <Card className="invitation-form-card">
+          <Title level={4} style={{ marginTop: 0, marginBottom: 8 }}>
+            Partner Details
           </Title>
-          <Paragraph className="invitation-subtitle">
-            Enter the partner's email address. They will receive login credentials
-            and instructions to complete their profile.
+          <Paragraph type="secondary" style={{ marginBottom: 24 }}>
+            Enter the partner's email address. A temporary password will be generated
+            and sent via email.
           </Paragraph>
 
           <Form
@@ -95,9 +102,9 @@ const CreatePartner = () => {
             autoComplete="off"
           >
             <Form.Item
-              label="Partner Organization Name (Optional)"
+              label="Partner Organization Name"
               name="partner_name"
-              extra="You can add this now or the partner can fill it in later"
+              extra="Optional - Partner can update this after logging in"
             >
               <Input
                 prefix={<ShopOutlined />}
@@ -121,66 +128,88 @@ const CreatePartner = () => {
               />
             </Form.Item>
 
-            <Form.Item>
+            <Form.Item style={{ marginBottom: 0 }}>
               <Button
                 type="primary"
                 htmlType="submit"
                 size="large"
                 icon={<SendOutlined />}
                 loading={loading}
-                block
               >
                 Send Invitation Email
               </Button>
             </Form.Item>
           </Form>
 
-          <div className="invitation-steps">
-            <Text className="invitation-steps-title">What happens next:</Text>
-            <ol>
-              <li>Partner receives an email with temporary login credentials</li>
-              <li>Partner logs in with the provided credentials</li>
-              <li>Partner is prompted to change their password</li>
-              <li>Partner completes their profile with all required details:
-                <ul style={{ marginTop: 8, marginBottom: 0 }}>
-                  <li>Organization details</li>
-                  <li>Address and region</li>
-                  <li>Contact information</li>
-                  <li>Website and logo</li>
-                  <li>Categories/services offered</li>
+          <Divider />
+
+          {/* What Happens Next */}
+          <div className="invitation-workflow">
+            <Title level={5} style={{ marginBottom: 16 }}>
+              <InfoCircleOutlined style={{ marginRight: 8 }} />
+              What Happens Next
+            </Title>
+            <ol className="workflow-steps">
+              <li>
+                <strong>Email Sent:</strong> Partner receives an email with temporary login credentials
+              </li>
+              <li>
+                <strong>First Login:</strong> Partner logs in at{" "}
+                <a href="https://partner.juniorpass.sg" target="_blank" rel="noopener noreferrer">
+                  partner.juniorpass.sg
+                </a>
+              </li>
+              <li>
+                <strong>Password Change:</strong> System prompts partner to change their temporary password
+              </li>
+              <li>
+                <strong>Profile Setup:</strong> Partner completes their organization profile:
+                <ul className="profile-fields">
+                  <li>Organization name & description</li>
+                  <li>Headquarters address & region</li>
+                  <li>Contact number & website</li>
+                  <li>Upload logo</li>
+                  <li>Select service categories</li>
+                  <li>Add outlet locations</li>
                 </ul>
               </li>
-              <li>Partner account becomes active</li>
+              <li>
+                <strong>Account Active:</strong> Partner can start creating class listings
+              </li>
             </ol>
           </div>
+        </Card>
 
+        {/* Sidebar Info */}
+        <div className="invitation-info-sidebar">
           <Alert
-            message="Default Profile Settings"
+            message="Temporary Credentials"
             description={
               <Space direction="vertical" size="small" style={{ width: "100%" }}>
-                <Text>• Default profile picture will be automatically assigned</Text>
-                <Text>• Rating starts at 0</Text>
-                <Text>• Credit balance starts at 0</Text>
-                <Text>• Categories can be selected from your predefined list</Text>
-                <Text>• All fields can be updated by partner after login</Text>
+                <Text>A secure 12-character password will be auto-generated</Text>
+                <Text>Partner must change password on first login</Text>
+                <Text>Email is sent immediately upon invitation</Text>
               </Space>
             }
             type="info"
             showIcon
-            icon={<CheckCircleOutlined />}
-            style={{ marginTop: 16 }}
+            style={{ marginBottom: 16 }}
           />
 
-          <div className="default-avatar-preview">
-            <ShopOutlined className="default-avatar-icon" />
-          </div>
-          <Text
-            type="secondary"
-            style={{ display: "block", textAlign: "center", fontSize: 12 }}
-          >
-            Default profile picture
-          </Text>
-        </Card>
+          <Alert
+            message="Default Settings"
+            description={
+              <Space direction="vertical" size="small" style={{ width: "100%" }}>
+                <Text>• Credit balance: 0</Text>
+                <Text>• Rating: 0 (updates with reviews)</Text>
+                <Text>• Profile: Incomplete (requires setup)</Text>
+                <Text>• Default category: Sports</Text>
+              </Space>
+            }
+            type="warning"
+            showIcon
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,11 +1,20 @@
-/* Create Partner Invitation Form Styles */
+/* Create Partner Invitation Form Styles - Admin Portal */
 
-.invitation-form-container {
-  max-width: 600px;
-  margin: 0 auto;
+/* Left-aligned header */
+.page-header-left {
+  text-align: left;
+  margin-bottom: var(--space-6);
 }
 
-.invitation-card {
+/* Two-column layout: Form (left) + Info sidebar (right) */
+.invitation-content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.invitation-form-card {
   background: var(--bg-secondary);
   border-radius: var(--border-radius-lg);
   padding: var(--space-8);
@@ -13,91 +22,88 @@
   box-shadow: var(--shadow);
 }
 
-.invitation-icon-wrapper {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: var(--color-primary-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto var(--space-6);
+.invitation-info-sidebar {
+  position: sticky;
+  top: var(--space-6);
 }
 
-.invitation-icon {
-  font-size: 40px;
-  color: var(--color-primary);
-}
-
-.invitation-title {
-  text-align: center;
-  margin-bottom: var(--space-2);
-  color: var(--text-primary);
-}
-
-.invitation-subtitle {
-  text-align: center;
-  color: var(--text-secondary);
-  margin-bottom: var(--space-8);
-  line-height: var(--line-height-relaxed);
-}
-
-.invitation-steps {
+/* Workflow steps styling */
+.invitation-workflow {
   background: var(--bg-tertiary);
   border-radius: var(--border-radius);
   padding: var(--space-6);
-  margin-bottom: var(--space-6);
 }
 
-.invitation-steps-title {
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--space-4);
-  color: var(--text-primary);
-}
-
-.invitation-steps ol {
+.workflow-steps {
   margin: 0;
-  padding-left: var(--space-5);
-}
-
-.invitation-steps li {
-  margin-bottom: var(--space-2);
+  padding-left: var(--space-6);
   color: var(--text-secondary);
 }
 
-.invitation-steps li:last-child {
+.workflow-steps li {
+  margin-bottom: var(--space-4);
+  line-height: var(--line-height-relaxed);
+}
+
+.workflow-steps li:last-child {
   margin-bottom: 0;
 }
 
-.invitation-info-box {
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
+.workflow-steps li strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.workflow-steps .profile-fields {
+  margin-top: var(--space-2);
+  margin-bottom: 0;
+  padding-left: var(--space-5);
+  list-style-type: disc;
+}
+
+.workflow-steps .profile-fields li {
+  margin-bottom: var(--space-1);
+  font-size: 14px;
+}
+
+/* Form styling */
+.invitation-form-card .ant-form-item-label > label {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.invitation-form-card .ant-input,
+.invitation-form-card .ant-input-affix-wrapper {
   border-radius: var(--border-radius);
-  padding: var(--space-4);
-  margin-top: var(--space-6);
 }
 
-.invitation-info-box .ant-typography {
-  margin-bottom: var(--space-2);
+/* Responsive layout */
+@media (max-width: 1200px) {
+  .invitation-content-wrapper {
+    grid-template-columns: 1fr 300px;
+  }
 }
 
-.invitation-info-box .ant-typography:last-child {
-  margin-bottom: 0;
+@media (max-width: 968px) {
+  .invitation-content-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .invitation-info-sidebar {
+    position: static;
+  }
 }
 
-.default-avatar-preview {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: var(--color-primary-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: var(--space-4) auto;
-  border: 2px solid var(--color-primary);
-}
+@media (max-width: 768px) {
+  .invitation-form-card {
+    padding: var(--space-6);
+  }
 
-.default-avatar-icon {
-  font-size: 50px;
-  color: var(--color-primary);
+  .workflow-steps {
+    padding-left: var(--space-4);
+  }
+
+  .workflow-steps .profile-fields {
+    padding-left: var(--space-4);
+  }
 }
