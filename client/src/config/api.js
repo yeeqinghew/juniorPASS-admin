@@ -14,12 +14,17 @@ export const API_ENDPOINTS = {
 
   // Partners
   GET_ALL_PARTNERS: `${API_BASE_URL}/admins/getAllPartners`,
-  CREATE_PARTNER: `${API_BASE_URL}/admins/createPartner`,
+  CREATE_PARTNER: `${API_BASE_URL}/admins/createPartner`, // Now sends invitation email
+  UPDATE_PARTNER: (partnerId) => `${API_BASE_URL}/admins/updatePartner/${partnerId}`,
+  DELETE_PARTNER: (partnerId) => `${API_BASE_URL}/admins/deletePartner/${partnerId}`,
 
   // Partner Enquiries
   GET_ALL_PARTNER_ENQUIRIES: `${API_BASE_URL}/admins/getAllPartnerEnquiries`,
   MARK_ENQUIRY_RESPONDED: (enquiryId) =>
     `${API_BASE_URL}/admins/markEnquiryResponded/${enquiryId}`,
+
+  // Categories
+  GET_ALL_CATEGORIES: `${API_BASE_URL}/categories`,
 };
 
 // Helper function for authenticated fetch

@@ -1,0 +1,103 @@
+/* Create Partner Invitation Form Styles */
+
+.invitation-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.invitation-card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-8);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.invitation-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-6);
+}
+
+.invitation-icon {
+  font-size: 40px;
+  color: var(--color-primary);
+}
+
+.invitation-title {
+  text-align: center;
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+}
+
+.invitation-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-8);
+  line-height: var(--line-height-relaxed);
+}
+
+.invitation-steps {
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.invitation-steps-title {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-4);
+  color: var(--text-primary);
+}
+
+.invitation-steps ol {
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.invitation-steps li {
+  margin-bottom: var(--space-2);
+  color: var(--text-secondary);
+}
+
+.invitation-steps li:last-child {
+  margin-bottom: 0;
+}
+
+.invitation-info-box {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: var(--border-radius);
+  padding: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.invitation-info-box .ant-typography {
+  margin-bottom: var(--space-2);
+}
+
+.invitation-info-box .ant-typography:last-child {
+  margin-bottom: 0;
+}
+
+.default-avatar-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--space-4) auto;
+  border: 2px solid var(--color-primary);
+}
+
+.default-avatar-icon {
+  font-size: 50px;
+  color: var(--color-primary);
+}

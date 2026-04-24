@@ -4,6 +4,7 @@
 @import './styles/Layout.css';
 @import './styles/Home.css';
 @import './styles/TablePage.css';
+@import './styles/CreatePartner.css';
 
 /* Reset and Base Styles */
 * {

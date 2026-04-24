@@ -162,7 +162,7 @@ const Partners = () => {
           size="large"
           onClick={() => navigate("/create-partner")}
         >
-          Create New Partner
+          Invite New Partner
         </Button>
       </div>
 
