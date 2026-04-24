@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Table, Tag, Space, Button, Input } from "antd";
+import { Table, Space, Button, Input } from "antd";
 import toast from "react-hot-toast";
+import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 
 const Children = () => {
   const [children, setChildren] = useState([]);
@@ -9,16 +10,9 @@ const Children = () => {
   useEffect(() => {
     const getChildren = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          "http://localhost:5000/admins/getAllChildren",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+        const response = await fetchWithAuth(API_ENDPOINTS.GET_ALL_CHILDREN, {
+          method: "GET",
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -48,14 +42,14 @@ const Children = () => {
         confirm,
         clearFilters,
       }) => (
-        <div style={{ padding: 8 }}>
+        <div className="filter-dropdown">
           <Input
+            className="filter-input"
             value={selectedKeys[0]}
             onChange={(e) =>
               setSelectedKeys(e.target.value ? [e.target.value] : [])
             }
             placeholder="Search name"
-            style={{ width: 188, marginBottom: 8, display: "block" }}
           />
           <Space>
             <Button onClick={() => confirm()} size="small" type="primary">
@@ -81,40 +75,21 @@ const Children = () => {
       key: "actions",
       render: (text, record) => (
         <Space size="middle">
-          <a style={{ color: "#1890ff" }}>Edit</a>
-          <a style={{ color: "#ff4d4f" }}>Delete</a>
+          <a className="action-link action-link-primary">Edit</a>
+          <a className="action-link action-link-danger">Delete</a>
         </Space>
       ),
     },
   ];
 
   return (
-    <div>
-      <div style={{ marginBottom: "32px" }}>
-        <h1
-          style={{
-            margin: 0,
-            fontSize: "28px",
-            fontWeight: "700",
-            color: "#1e293b",
-          }}
-        >
-          Children
-        </h1>
-        <p style={{ margin: "8px 0 0 0", color: "#64748b", fontSize: "15px" }}>
-          Manage children profiles
-        </p>
+    <div className="page-container">
+      <div className="page-header">
+        <h1 className="page-title">Children</h1>
+        <p className="page-subtitle">Manage children profiles</p>
       </div>
 
-      <div
-        style={{
-          background: "#ffffff",
-          borderRadius: "16px",
-          padding: "28px",
-          border: "1px solid #e5e7eb",
-          boxShadow: "0 2px 12px rgba(0, 0, 0, 0.06)",
-        }}
-      >
+      <div className="table-card">
         <Table
           columns={columns}
           dataSource={children}

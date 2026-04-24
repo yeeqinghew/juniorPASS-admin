@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input, Table, message } from "antd";
 import toast from "react-hot-toast";
+import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 
 const Parents = () => {
   const [users, setUsers] = useState([]);
@@ -11,21 +12,21 @@ const Parents = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      sorter: (a, b) => a.name.localeCompare(b.name), // Sorting by Name
+      sorter: (a, b) => a.name.localeCompare(b.name),
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
         confirm,
         clearFilters,
       }) => (
-        <div>
+        <div className="filter-dropdown">
           <Input
+            className="filter-input"
             value={selectedKeys[0]}
             onChange={(e) =>
               setSelectedKeys(e.target.value ? [e.target.value] : [])
             }
             placeholder="Search name"
-            style={{ width: 188, marginBottom: 8, display: "block" }}
           />
           <Button onClick={() => confirm()}>Search</Button>
           <Button onClick={clearFilters}>Reset</Button>
@@ -38,20 +39,20 @@ const Parents = () => {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      sorter: (a, b) => a.email.localeCompare(b.email), // Sorting by Email
+      sorter: (a, b) => a.email.localeCompare(b.email),
     },
     {
       title: "Phone Number",
       dataIndex: "phone_number",
       key: "phone_number",
-      sorter: (a, b) => a.phone_number.localeCompare(b.phone_number), // Sorting by Phone Number
+      sorter: (a, b) => a.phone_number.localeCompare(b.phone_number),
     },
     {
       title: "Created At",
       dataIndex: "created_at",
       key: "created_at",
       render: (text) => new Date(text).toLocaleString(),
-      sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at), // Sorting by Created On
+      sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
     },
   ];
 
@@ -59,17 +60,9 @@ const Parents = () => {
     async function getAllUsers() {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          "http://localhost:5000/admins/getAllParents",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+        const response = await fetchWithAuth(API_ENDPOINTS.GET_ALL_PARENTS, {
+          method: "GET",
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch users");
@@ -90,32 +83,13 @@ const Parents = () => {
   }, []);
 
   return (
-    <div>
-      <div style={{ marginBottom: "32px" }}>
-        <h1
-          style={{
-            margin: 0,
-            fontSize: "28px",
-            fontWeight: "700",
-            color: "#1e293b",
-          }}
-        >
-          Parents
-        </h1>
-        <p style={{ margin: "8px 0 0 0", color: "#64748b", fontSize: "15px" }}>
-          Manage parent user accounts
-        </p>
+    <div className="page-container">
+      <div className="page-header">
+        <h1 className="page-title">Parents</h1>
+        <p className="page-subtitle">Manage parent user accounts</p>
       </div>
 
-      <div
-        style={{
-          background: "#ffffff",
-          borderRadius: "16px",
-          padding: "28px",
-          border: "1px solid #e5e7eb",
-          boxShadow: "0 2px 12px rgba(0, 0, 0, 0.06)",
-        }}
-      >
+      <div className="table-card">
         <Table
           columns={columns}
           dataSource={users.map((user) => ({ ...user, key: user.user_id }))}

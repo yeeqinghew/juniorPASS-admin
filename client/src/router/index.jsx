@@ -4,6 +4,7 @@ import AdminHomeLayout from "../layout/AdminHomeLayout";
 import AdminLogin from "../components/Login";
 import Home from "../components/Home";
 import Partners from "../components/Partners";
+import CreatePartner from "../components/Partners/CreatePartner";
 import Parents from "../components/Users/Parents";
 import Children from "../components/Users/Children";
 import PartnerEnquiries from "../components/PartnerEnquiries";
@@ -25,6 +26,7 @@ const Routers = () => {
             <Route path="parents" element={<Parents />}></Route>
             <Route path="children" element={<Children />}></Route>
             <Route path="partners" element={<Partners />}></Route>
+            <Route path="create-partner" element={<CreatePartner />}></Route>
             <Route
               path="partner-enquiries"
               element={<PartnerEnquiries />}

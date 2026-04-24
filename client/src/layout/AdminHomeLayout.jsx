@@ -21,46 +21,23 @@ const { Text } = Typography;
 const AdminHomeLayout = () => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
-  
+
   return (
-    <Layout
-      style={{
-        minHeight: "100vh",
-      }}
-    >
+    <Layout className="admin-layout">
       <Sider
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
         trigger={null}
         theme="light"
-        style={{
-          height: "100vh",
-          position: "fixed",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          background: "#ffffff",
-          borderRight: "1px solid #e5e7eb",
-          boxShadow: "2px 0 12px rgba(0, 0, 0, 0.04)",
-          zIndex: 100,
-        }}
+        className="sidebar"
       >
-        <div
-          style={{
-            padding: collapsed ? "20px 16px" : "20px 24px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            transition: "all 0.3s",
-            borderBottom: "1px solid #e5e7eb",
-          }}
-        >
+        <div className={`sidebar-logo-wrapper ${collapsed ? 'collapsed' : 'expanded'}`}>
           <Image
             src={logo}
             preview={false}
             width={collapsed ? 40 : 80}
-            style={{ transition: "all 0.3s" }}
+            className="sidebar-logo"
           />
         </div>
 
@@ -70,115 +47,72 @@ const AdminHomeLayout = () => {
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={!collapsed ? ["2"] : []}
           onClick={({ key }) => {
-            if (key === "1") navigate("/home"); // Dashboard route
-            if (key === "3") navigate("/parents"); // Parents list
-            if (key === "4") navigate("/children"); // Children list
-            if (key === "5") navigate("/partners"); // Partners list
-            if (key === "7") navigate("/partner-enquiries"); // Partner Enquiries
+            if (key === "1") navigate("/home");
+            if (key === "3") navigate("/parents");
+            if (key === "4") navigate("/children");
+            if (key === "5") navigate("/partners");
+            if (key === "7") navigate("/partner-enquiries");
           }}
+          className="sidebar-menu"
           items={[
             {
               key: "1",
-              icon: <HomeOutlined style={{ fontSize: "20px", color: "#64748b" }} />,
-              label: <span style={{ fontSize: "16px", fontWeight: "500" }}>Dashboard</span>,
+              icon: <HomeOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Dashboard</span>,
             },
             {
               key: "2",
-              icon: <UserOutlined style={{ fontSize: "20px", color: "#64748b" }} />,
-              label: <span style={{ fontSize: "16px", fontWeight: "500" }}>Users</span>,
+              icon: <UserOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Users</span>,
               children: [
                 {
                   key: "3",
-                  icon: <TeamOutlined style={{ fontSize: "16px" }} />,
+                  icon: <TeamOutlined />,
                   label: "Parents",
                 },
                 {
                   key: "4",
-                  icon: <TeamOutlined style={{ fontSize: "16px" }} />,
+                  icon: <TeamOutlined />,
                   label: "Children",
                 },
               ],
             },
             {
               key: "5",
-              icon: <ShopOutlined style={{ fontSize: "20px", color: "#64748b" }} />,
-              label: <span style={{ fontSize: "16px", fontWeight: "500" }}>Partners</span>,
+              icon: <ShopOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Partners</span>,
             },
             {
               key: "7",
-              icon: <FormOutlined />,
-              label: "Partner Enquiries",
+              icon: <FormOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Partner Enquiries</span>,
             },
             {
               key: "6",
-              icon: <UploadOutlined style={{ fontSize: "20px", color: "#64748b" }} />,
-              label: <span style={{ fontSize: "16px", fontWeight: "500" }}>Transactions</span>,
+              icon: <UploadOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Transactions</span>,
             },
           ]}
-          style={{
-            borderRight: 0,
-            padding: "16px 8px",
-          }}
         />
       </Sider>
 
-      <Layout
-        style={{
-          marginLeft: collapsed ? 80 : 200,
-          transition: "all 0.2s",
-        }}
-      >
-        <Header
-          style={{
-            padding: "0 32px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            background: "#FCFBF8",
-            borderBottom: "1px solid #e5e7eb",
-            boxShadow: "0 2px 12px rgba(0, 0, 0, 0.06)",
-            position: "sticky",
-            top: 0,
-            zIndex: 99,
-            height: "70px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+      <Layout className={`main-layout ${collapsed ? 'sidebar-collapsed' : 'sidebar-expanded'}`}>
+        <Header className="main-header">
+          <div className="header-left">
             {React.createElement(
               collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
               {
-                style: { 
-                  fontSize: "20px", 
-                  cursor: "pointer", 
-                  color: "#98BDD2",
-                  transition: "all 0.3s ease",
-                },
+                className: "header-toggle-icon",
                 onClick: () => setCollapsed(!collapsed),
               }
             )}
-            <Text
-              strong
-              style={{
-                fontSize: "20px",
-                color: "#1e293b",
-                fontWeight: "700",
-              }}
-            >
-              Admin Portal
-            </Text>
+            <Text className="header-title">Admin Portal</Text>
           </div>
-          
-          <Space size="large">
-            <Badge count={5} offset={[-5, 5]} style={{ backgroundColor: "#98BDD2" }}>
+
+          <Space size="large" className="header-right">
+            <Badge count={5} offset={[-5, 5]}>
               <BellOutlined
-                style={{
-                  fontSize: "22px",
-                  cursor: "pointer",
-                  color: "#64748b",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => e.target.style.color = "#98BDD2"}
-                onMouseLeave={(e) => e.target.style.color = "#64748b"}
+                className="header-notification-icon"
                 onClick={() => {
                   // TODO: Show notifications
                 }}
@@ -186,22 +120,11 @@ const AdminHomeLayout = () => {
             </Badge>
             <Avatar
               size={40}
-              style={{
-                backgroundColor: "#98BDD2",
-                cursor: "pointer",
-                border: "2px solid #e5e7eb",
-              }}
+              className="header-avatar"
               icon={<UserOutlined />}
             />
             <LogoutOutlined
-              style={{
-                fontSize: "22px",
-                cursor: "pointer",
-                color: "#64748b",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => e.target.style.color = "#ef4444"}
-              onMouseLeave={(e) => e.target.style.color = "#64748b"}
+              className="header-logout-icon"
               onClick={() => {
                 localStorage.removeItem("token");
                 navigate("/");
@@ -209,17 +132,7 @@ const AdminHomeLayout = () => {
             />
           </Space>
         </Header>
-        <Content
-          style={{
-            margin: "32px",
-            padding: "32px",
-            minHeight: "calc(100vh - 134px)",
-            background: "#ffffff",
-            borderRadius: "16px",
-            border: "1px solid #e5e7eb",
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-          }}
-        >
+        <Content className="main-content">
           <div className="fade-in">
             <Outlet />
           </div>

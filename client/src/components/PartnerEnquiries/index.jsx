@@ -17,6 +17,7 @@ import {
   CheckOutlined,
 } from "@ant-design/icons";
 import toast from "react-hot-toast";
+import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 
 const { Text, Paragraph } = Typography;
 
@@ -34,15 +35,11 @@ const PartnerEnquiries = () => {
   const fetchEnquiries = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "http://localhost:5000/admins/getAllPartnerEnquiries",
+      const response = await fetchWithAuth(
+        API_ENDPOINTS.GET_ALL_PARTNER_ENQUIRIES,
         {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
+        }
       );
 
       if (!response.ok) {
@@ -63,13 +60,13 @@ const PartnerEnquiries = () => {
   const handleMarkAsResponded = async (enquiryId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/admins/markEnquiryResponded/${enquiryId}`,
+        API_ENDPOINTS.MARK_ENQUIRY_RESPONDED(enquiryId),
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       if (!response.ok) {
@@ -77,7 +74,7 @@ const PartnerEnquiries = () => {
       }
 
       message.success("Enquiry marked as responded!");
-      fetchEnquiries(); // Refresh the list
+      fetchEnquiries();
     } catch (error) {
       console.error(error.message);
       toast.error("Error updating enquiry status.");
@@ -122,21 +119,14 @@ const PartnerEnquiries = () => {
         confirm,
         clearFilters,
       }) => (
-        <div style={{ padding: 8 }}>
+        <div className="filter-dropdown">
           <input
+            className="filter-input"
             value={selectedKeys[0]}
             onChange={(e) =>
               setSelectedKeys(e.target.value ? [e.target.value] : [])
             }
             placeholder="Search company name"
-            style={{
-              width: 200,
-              marginBottom: 8,
-              display: "block",
-              padding: 8,
-              borderRadius: 4,
-              border: "1px solid #d9d9d9",
-            }}
           />
           <Space>
             <Button size="small" onClick={() => confirm()}>
@@ -169,21 +159,14 @@ const PartnerEnquiries = () => {
         confirm,
         clearFilters,
       }) => (
-        <div style={{ padding: 8 }}>
+        <div className="filter-dropdown">
           <input
+            className="filter-input"
             value={selectedKeys[0]}
             onChange={(e) =>
               setSelectedKeys(e.target.value ? [e.target.value] : [])
             }
             placeholder="Search email"
-            style={{
-              width: 200,
-              marginBottom: 8,
-              display: "block",
-              padding: 8,
-              borderRadius: 4,
-              border: "1px solid #d9d9d9",
-            }}
           />
           <Space>
             <Button size="small" onClick={() => confirm()}>
@@ -252,46 +235,37 @@ const PartnerEnquiries = () => {
   ];
 
   return (
-    <div style={{ padding: "20px" }}>
-      <Space
-        direction="vertical"
-        size="large"
-        style={{ width: "100%", marginBottom: 16 }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h1 style={{ margin: 0 }}>Partner Enquiries</h1>
+    <div className="page-container">
+      <Space direction="vertical" size="large" style={{ width: "100%", marginBottom: 16 }}>
+        <div className="page-actions">
+          <div className="page-header">
+            <h1 className="page-title">Partner Enquiries</h1>
+            <p className="page-subtitle">Manage partnership requests and inquiries</p>
+          </div>
           <Button onClick={fetchEnquiries} loading={loading}>
             Refresh
           </Button>
         </div>
 
-        <Card size="small">
-          <Space size="large">
-            <div>
-              <Text type="secondary">Total Enquiries: </Text>
-              <Text strong style={{ fontSize: 18 }}>
-                {enquiries.length}
-              </Text>
+        <Card size="small" className="stats-card">
+          <div className="stats-wrapper">
+            <div className="stat-item">
+              <Text className="stat-label">Total Enquiries: </Text>
+              <Text className="stat-value">{enquiries.length}</Text>
             </div>
-            <div>
-              <Text type="secondary">Pending: </Text>
-              <Text strong style={{ fontSize: 18, color: "#faad14" }}>
+            <div className="stat-item">
+              <Text className="stat-label">Pending: </Text>
+              <Text className="stat-value stat-value-warning">
                 {enquiries.filter((e) => !e.responded).length}
               </Text>
             </div>
-            <div>
-              <Text type="secondary">Responded: </Text>
-              <Text strong style={{ fontSize: 18, color: "#52c41a" }}>
+            <div className="stat-item">
+              <Text className="stat-label">Responded: </Text>
+              <Text className="stat-value stat-value-success">
                 {enquiries.filter((e) => e.responded).length}
               </Text>
             </div>
-          </Space>
+          </div>
         </Card>
       </Space>
 
@@ -364,53 +338,53 @@ const PartnerEnquiries = () => {
       >
         {selectedEnquiry && (
           <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-            <Card size="small" title="Company Information">
+            <Card size="small" title="Company Information" className="modal-section-card">
               <Space direction="vertical" style={{ width: "100%" }}>
-                <div>
-                  <Text type="secondary">Company Name:</Text>
+                <div className="modal-field">
+                  <Text className="modal-field-label">Company Name:</Text>
                   <br />
-                  <Text strong style={{ fontSize: 16 }}>
+                  <Text className="modal-field-value modal-field-value-large">
                     {selectedEnquiry.company_name}
                   </Text>
                 </div>
-                <div>
-                  <Text type="secondary">Contact Person:</Text>
+                <div className="modal-field">
+                  <Text className="modal-field-label">Contact Person:</Text>
                   <br />
-                  <Text strong>{selectedEnquiry.contact_person_name}</Text>
+                  <Text className="modal-field-value">{selectedEnquiry.contact_person_name}</Text>
                 </div>
-                <div>
-                  <Text type="secondary">Email:</Text>
+                <div className="modal-field">
+                  <Text className="modal-field-label">Email:</Text>
                   <br />
-                  <Text strong copyable>
+                  <Text className="modal-field-value" copyable>
                     {selectedEnquiry.email}
                   </Text>
                 </div>
               </Space>
             </Card>
 
-            <Card size="small" title="Message">
-              <Paragraph style={{ margin: 0, whiteSpace: "pre-wrap" }}>
+            <Card size="small" title="Message" className="modal-section-card">
+              <Paragraph className="modal-message">
                 {selectedEnquiry.message || "No message provided"}
               </Paragraph>
             </Card>
 
-            <Card size="small" title="Metadata">
+            <Card size="small" title="Metadata" className="modal-section-card">
               <Space direction="vertical" style={{ width: "100%" }}>
-                <div>
-                  <Text type="secondary">Enquiry ID:</Text>
+                <div className="modal-field">
+                  <Text className="modal-field-label">Enquiry ID:</Text>
                   <br />
                   <Text code>{selectedEnquiry.id}</Text>
                 </div>
-                <div>
-                  <Text type="secondary">Submitted On:</Text>
+                <div className="modal-field">
+                  <Text className="modal-field-label">Submitted On:</Text>
                   <br />
                   <Text>
                     {new Date(selectedEnquiry.created_at).toLocaleString()}
                   </Text>
                 </div>
                 {selectedEnquiry.updated_at && (
-                  <div>
-                    <Text type="secondary">Last Updated:</Text>
+                  <div className="modal-field">
+                    <Text className="modal-field-label">Last Updated:</Text>
                     <br />
                     <Text>
                       {new Date(selectedEnquiry.updated_at).toLocaleString()}

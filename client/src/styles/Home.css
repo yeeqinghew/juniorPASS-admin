@@ -1,0 +1,108 @@
+/* Home Dashboard Styles */
+
+.home-container {
+  width: 100%;
+}
+
+.home-header {
+  margin-bottom: var(--space-8);
+}
+
+.home-title {
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-3xl);
+}
+
+.home-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+}
+
+/* Stat Card Styles */
+.stat-card {
+  border-radius: var(--border-radius-lg);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow);
+  transition: all var(--transition-normal);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-card-body {
+  padding: var(--space-7);
+}
+
+.stat-card-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.stat-card-icon-wrapper {
+  width: var(--avatar-xl);
+  height: var(--avatar-xl);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-card-icon {
+  font-size: var(--icon-xl);
+}
+
+.stat-card-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.stat-card-label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.stat-card-value {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  line-height: var(--line-height-tight);
+}
+
+/* Activity & Quick Actions Cards */
+.activity-section {
+  margin-top: var(--space-8);
+}
+
+.section-card {
+  border-radius: var(--border-radius-lg);
+  border: var(--border-width) solid var(--border-color);
+  box-shadow: var(--shadow);
+  height: 100%;
+}
+
+.section-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.section-card-content {
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-card-placeholder {
+  color: var(--text-tertiary);
+  font-size: var(--font-size-base);
+}

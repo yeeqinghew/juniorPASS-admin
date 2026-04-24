@@ -6,6 +6,7 @@ import {
   ShopOutlined,
   DollarOutlined,
 } from "@ant-design/icons";
+import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 
 const { Title, Text } = Typography;
 
@@ -18,33 +19,12 @@ const Home = () => {
   });
 
   useEffect(() => {
-    // Fetch statistics
     const fetchStats = async () => {
       try {
-        const token = localStorage.getItem("token");
-
         const [parentsRes, childrenRes, partnersRes] = await Promise.all([
-          fetch("http://localhost:5000/admins/getAllParents", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-          fetch("http://localhost:5000/admins/getAllChildren", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-          fetch("http://localhost:5000/admins/getAllPartners", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }),
+          fetchWithAuth(API_ENDPOINTS.GET_ALL_PARENTS, { method: "GET" }),
+          fetchWithAuth(API_ENDPOINTS.GET_ALL_CHILDREN, { method: "GET" }),
+          fetchWithAuth(API_ENDPOINTS.GET_ALL_PARTNERS, { method: "GET" }),
         ]);
 
         const parents = await parentsRes.json();
@@ -66,67 +46,39 @@ const Home = () => {
   }, []);
 
   const StatCard = ({ title, value, icon, color, prefix }) => (
-    <Card
-      hoverable
-      style={{
-        borderRadius: "16px",
-        border: "1px solid #e5e7eb",
-        boxShadow: "0 2px 12px rgba(0, 0, 0, 0.06)",
-        transition: "all 0.3s ease",
-      }}
-      bodyStyle={{ padding: "28px" }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-        <div
-          style={{
-            width: "64px",
-            height: "64px",
-            borderRadius: "12px",
-            background: `${color}15`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {React.cloneElement(icon, {
-            style: { fontSize: "32px", color: color },
-          })}
-        </div>
-        <div style={{ flex: 1 }}>
-          <Text
-            style={{
-              color: "#64748b",
-              fontSize: "14px",
-              display: "block",
-              marginBottom: "8px",
-            }}
+    <Card hoverable className="stat-card" bodyStyle={{ padding: 0 }}>
+      <div className="stat-card-body">
+        <div className="stat-card-content">
+          <div
+            className="stat-card-icon-wrapper"
+            style={{ background: `${color}15` }}
           >
-            {title}
-          </Text>
-          <Statistic
-            value={value}
-            prefix={prefix}
-            valueStyle={{
-              fontSize: "32px",
-              fontWeight: "700",
-              color: "#1e293b",
-            }}
-          />
+            {React.cloneElement(icon, {
+              className: "stat-card-icon",
+              style: { color: color },
+            })}
+          </div>
+          <div className="stat-card-details">
+            <Text className="stat-card-label">{title}</Text>
+            <Statistic
+              value={value}
+              prefix={prefix}
+              valueStyle={{ fontSize: 0 }}
+            />
+            <div className="stat-card-value">{prefix}{value}</div>
+          </div>
         </div>
       </div>
     </Card>
   );
 
   return (
-    <div>
-      <div style={{ marginBottom: "32px" }}>
-        <Title
-          level={2}
-          style={{ marginBottom: "8px", color: "#1e293b", fontWeight: "700" }}
-        >
+    <div className="home-container">
+      <div className="home-header">
+        <Title level={2} className="home-title">
           Dashboard Overview
         </Title>
-        <Text style={{ color: "#64748b", fontSize: "16px" }}>
+        <Text className="home-subtitle">
           Welcome back! Here's what's happening with your platform today.
         </Text>
       </div>
@@ -170,35 +122,14 @@ const Home = () => {
         </Col>
       </Row>
 
-      <Row gutter={[24, 24]} style={{ marginTop: "32px" }}>
+      <Row gutter={[24, 24]} className="activity-section">
         <Col xs={24} lg={16}>
           <Card
-            title={
-              <span
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "600",
-                  color: "#1e293b",
-                }}
-              >
-                Recent Activity
-              </span>
-            }
-            style={{
-              borderRadius: "16px",
-              border: "1px solid #e5e7eb",
-              boxShadow: "0 2px 12px rgba(0, 0, 0, 0.06)",
-            }}
+            title={<span className="section-card-title">Recent Activity</span>}
+            className="section-card"
           >
-            <div
-              style={{
-                minHeight: "320px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ color: "#94a3b8", fontSize: "15px" }}>
+            <div className="section-card-content">
+              <Text className="section-card-placeholder">
                 Activity chart coming soon...
               </Text>
             </div>
@@ -207,32 +138,11 @@ const Home = () => {
 
         <Col xs={24} lg={8}>
           <Card
-            title={
-              <span
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "600",
-                  color: "#1e293b",
-                }}
-              >
-                Quick Actions
-              </span>
-            }
-            style={{
-              borderRadius: "16px",
-              border: "1px solid #e5e7eb",
-              boxShadow: "0 2px 12px rgba(0, 0, 0, 0.06)",
-            }}
+            title={<span className="section-card-title">Quick Actions</span>}
+            className="section-card"
           >
-            <div
-              style={{
-                minHeight: "320px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ color: "#94a3b8", fontSize: "15px" }}>
+            <div className="section-card-content">
+              <Text className="section-card-placeholder">
                 Quick actions coming soon...
               </Text>
             </div>

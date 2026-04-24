@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Table, message, Image } from "antd";
+import { Table, message, Image, Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 
 const Partners = () => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // Define table columns for partners
   const columns = [
     {
       title: "Logo",
@@ -18,7 +21,7 @@ const Partners = () => {
           alt="Partner Logo"
           width={50}
           height={50}
-          style={{ objectFit: "contain" }}
+          className="partner-logo"
         />
       ),
     },
@@ -26,68 +29,68 @@ const Partners = () => {
       title: "Name",
       dataIndex: "partner_name",
       key: "partner_name",
-      sorter: (a, b) => a.partner_name.localeCompare(b.partner_name), // Sorting by Partner Name
+      sorter: (a, b) => a.partner_name.localeCompare(b.partner_name),
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
         confirm,
         clearFilters,
       }) => (
-        <div>
+        <div className="filter-dropdown">
           <input
+            className="filter-input"
             value={selectedKeys[0]}
             onChange={(e) =>
               setSelectedKeys(e.target.value ? [e.target.value] : [])
             }
             placeholder="Search partner name"
-            style={{ width: 188, marginBottom: 8, display: "block" }}
           />
           <button onClick={() => confirm()}>Search</button>
           <button onClick={clearFilters}>Reset</button>
         </div>
       ),
       onFilter: (value, record) =>
-        record.partner_name.toLowerCase().includes(value.toLowerCase()), // Filter by Partner Name
+        record.partner_name.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      sorter: (a, b) => a.email.localeCompare(b.email), // Sorting by Email
+      sorter: (a, b) => a.email.localeCompare(b.email),
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
         confirm,
         clearFilters,
       }) => (
-        <div>
+        <div className="filter-dropdown">
           <input
+            className="filter-input"
             value={selectedKeys[0]}
             onChange={(e) =>
               setSelectedKeys(e.target.value ? [e.target.value] : [])
             }
             placeholder="Search email"
-            style={{ width: 188, marginBottom: 8, display: "block" }}
           />
           <button onClick={() => confirm()}>Search</button>
           <button onClick={clearFilters}>Reset</button>
         </div>
       ),
       onFilter: (value, record) =>
-        record.email.toLowerCase().includes(value.toLowerCase()), // Filter by Email
+        record.email.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Contact Number",
       dataIndex: "contact_number",
       key: "contact_number",
-      sorter: (a, b) => a.contact_number.localeCompare(b.contact_number), // Sorting by Contact Number
+      sorter: (a, b) => a.contact_number.localeCompare(b.contact_number),
     },
     {
       title: "Website",
       dataIndex: "website",
       key: "website",
       render: (website) => (
-        <a href={website} target="_blank" rel="noopener noreferrer">
+        <a href={website} target="_blank" rel="noopener noreferrer" className="table-link">
           Visit
         </a>
       ),
@@ -96,46 +99,37 @@ const Partners = () => {
       title: "Region",
       dataIndex: "region",
       key: "region",
-      sorter: (a, b) => a.region.localeCompare(b.region), // Sorting by Region
+      sorter: (a, b) => a.region.localeCompare(b.region),
     },
     {
       title: "Rating",
       dataIndex: "rating",
       key: "rating",
       render: (rating) => `${rating} / 5`,
-      sorter: (a, b) => a.rating - b.rating, // Sorting by Rating
+      sorter: (a, b) => a.rating - b.rating,
     },
     {
       title: "Categories",
       dataIndex: "categories",
       key: "categories",
-      render: (categories) => categories.replace(/{|}/g, ""), // Remove curly braces
+      render: (categories) => categories.replace(/{|}/g, ""),
     },
     {
       title: "Created On",
       dataIndex: "created_at",
       key: "created_at",
       render: (text) => new Date(text).toLocaleString(),
-      sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at), // Sorting by Created On
+      sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
     },
   ];
 
-  // Fetch partners data
   useEffect(() => {
     async function fetchPartners() {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          "http://localhost:5000/admins/getAllPartners",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+        const response = await fetchWithAuth(API_ENDPOINTS.GET_ALL_PARTNERS, {
+          method: "GET",
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch partners");
@@ -156,32 +150,23 @@ const Partners = () => {
   }, []);
 
   return (
-    <div>
-      <div style={{ marginBottom: "32px" }}>
-        <h1
-          style={{
-            margin: 0,
-            fontSize: "28px",
-            fontWeight: "700",
-            color: "#1e293b",
-          }}
+    <div className="page-container">
+      <div className="page-actions">
+        <div className="page-header">
+          <h1 className="page-title">Partners</h1>
+          <p className="page-subtitle">Manage all partner organizations</p>
+        </div>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          size="large"
+          onClick={() => navigate("/create-partner")}
         >
-          Partners
-        </h1>
-        <p style={{ margin: "8px 0 0 0", color: "#64748b", fontSize: "15px" }}>
-          Manage all partner organizations
-        </p>
+          Create New Partner
+        </Button>
       </div>
 
-      <div
-        style={{
-          background: "#ffffff",
-          borderRadius: "16px",
-          padding: "28px",
-          border: "1px solid #e5e7eb",
-          boxShadow: "0 2px 12px rgba(0, 0, 0, 0.06)",
-        }}
-      >
+      <div className="table-card">
         <Table
           columns={columns}
           dataSource={partners.map((partner) => ({
