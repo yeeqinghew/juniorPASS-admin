@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Table, message, Image, Button } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Table, message, Image, Button, Input } from "antd";
+import { PlusOutlined, SearchOutlined, ShopOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
@@ -8,6 +8,7 @@ import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 const Partners = () => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   const columns = [
@@ -15,12 +16,14 @@ const Partners = () => {
       title: "Logo",
       dataIndex: "picture",
       key: "picture",
+      width: 82,
       render: (picture) => (
         <Image
           src={picture}
           alt="Partner Logo"
           width={50}
           height={50}
+          preview={false}
           className="partner-logo"
         />
       ),
@@ -29,82 +32,51 @@ const Partners = () => {
       title: "Name",
       dataIndex: "partner_name",
       key: "partner_name",
+      width: 190,
+      ellipsis: true,
       sorter: (a, b) => a.partner_name.localeCompare(b.partner_name),
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div className="filter-dropdown">
-          <input
-            className="filter-input"
-            value={selectedKeys[0]}
-            onChange={(e) =>
-              setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            placeholder="Search partner name"
-          />
-          <button onClick={() => confirm()}>Search</button>
-          <button onClick={clearFilters}>Reset</button>
-        </div>
-      ),
-      onFilter: (value, record) =>
-        record.partner_name.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      width: 230,
+      ellipsis: true,
       sorter: (a, b) => a.email.localeCompare(b.email),
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div className="filter-dropdown">
-          <input
-            className="filter-input"
-            value={selectedKeys[0]}
-            onChange={(e) =>
-              setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            placeholder="Search email"
-          />
-          <button onClick={() => confirm()}>Search</button>
-          <button onClick={clearFilters}>Reset</button>
-        </div>
-      ),
-      onFilter: (value, record) =>
-        record.email.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Contact Number",
       dataIndex: "contact_number",
       key: "contact_number",
+      width: 170,
       sorter: (a, b) => a.contact_number.localeCompare(b.contact_number),
     },
     {
       title: "Website",
       dataIndex: "website",
       key: "website",
+      width: 100,
       render: (website) => (
-        <a href={website} target="_blank" rel="noopener noreferrer" className="table-link">
-          Visit
-        </a>
+        website ? (
+          <a href={website} target="_blank" rel="noopener noreferrer" className="table-link">
+            Visit
+          </a>
+        ) : "—"
       ),
     },
     {
       title: "Region",
       dataIndex: "region",
       key: "region",
+      width: 120,
+      ellipsis: true,
       sorter: (a, b) => a.region.localeCompare(b.region),
     },
     {
       title: "Rating",
       dataIndex: "rating",
       key: "rating",
+      width: 100,
       render: (rating) => `${rating} / 5`,
       sorter: (a, b) => a.rating - b.rating,
     },
@@ -112,12 +84,16 @@ const Partners = () => {
       title: "Categories",
       dataIndex: "categories",
       key: "categories",
-      render: (categories) => categories.replace(/{|}/g, ""),
+      width: 180,
+      ellipsis: true,
+      render: (categories) =>
+        String(categories || "").replace(/{|}/g, "") || "—",
     },
     {
       title: "Created On",
       dataIndex: "created_at",
       key: "created_at",
+      width: 200,
       render: (text) => new Date(text).toLocaleString(),
       sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
     },
@@ -149,32 +125,73 @@ const Partners = () => {
     fetchPartners();
   }, []);
 
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredPartners = normalizedSearch
+    ? partners.filter((partner) =>
+        [
+          partner.partner_name,
+          partner.email,
+          partner.contact_number,
+          partner.region,
+          partner.categories,
+        ].some((value) =>
+          String(value || "")
+            .toLowerCase()
+            .includes(normalizedSearch),
+        ),
+      )
+    : partners;
+
   return (
     <div className="page-container">
-      <div className="page-actions">
+      <div className="page-header-card page-actions">
         <div className="page-header">
+          <span className="page-kicker">Partner management</span>
           <h1 className="page-title">Partners</h1>
-          <p className="page-subtitle">Manage all partner organizations</p>
+          <p className="page-subtitle">Manage partner organisations and onboarding.</p>
         </div>
         <Button
           type="primary"
           icon={<PlusOutlined />}
           size="large"
           onClick={() => navigate("/create-partner")}
+          className="page-primary-action"
         >
-          Invite New Partner
+          Invite partner
         </Button>
       </div>
 
       <div className="table-card">
+        <div className="table-toolbar">
+          <div>
+            <h2>Partner directory</h2>
+            <p>{filteredPartners.length} records shown</p>
+          </div>
+          <div className="table-toolbar-actions">
+            <div className="page-record-count compact">
+              <ShopOutlined />
+              {partners.length} total
+            </div>
+            <Input
+              allowClear
+              prefix={<SearchOutlined />}
+              placeholder="Search partners"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              className="table-search"
+            />
+          </div>
+        </div>
         <Table
           columns={columns}
-          dataSource={partners.map((partner) => ({
+          dataSource={filteredPartners.map((partner) => ({
             ...partner,
             key: partner.partner_id,
           }))}
           loading={loading}
           bordered={false}
+          size="middle"
+          scroll={{ x: 1370 }}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,

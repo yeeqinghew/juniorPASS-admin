@@ -9,12 +9,14 @@ import {
   Typography,
   Card,
   Popconfirm,
+  Input,
 } from "antd";
 import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   EyeOutlined,
   CheckOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
@@ -26,6 +28,7 @@ const PartnerEnquiries = () => {
   const [loading, setLoading] = useState(false);
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch partner enquiries data
   useEffect(() => {
@@ -59,13 +62,10 @@ const PartnerEnquiries = () => {
 
   const handleMarkAsResponded = async (enquiryId) => {
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         API_ENDPOINTS.MARK_ENQUIRY_RESPONDED(enquiryId),
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
@@ -92,7 +92,7 @@ const PartnerEnquiries = () => {
       title: "Status",
       dataIndex: "responded",
       key: "responded",
-      width: 120,
+      width: 135,
       render: (responded) => (
         <Tag
           icon={responded ? <CheckCircleOutlined /> : <ClockCircleOutlined />}
@@ -112,39 +112,16 @@ const PartnerEnquiries = () => {
       title: "Company Name",
       dataIndex: "company_name",
       key: "company_name",
+      width: 190,
+      ellipsis: true,
       sorter: (a, b) => a.company_name.localeCompare(b.company_name),
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div className="filter-dropdown">
-          <input
-            className="filter-input"
-            value={selectedKeys[0]}
-            onChange={(e) =>
-              setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            placeholder="Search company name"
-          />
-          <Space>
-            <Button size="small" onClick={() => confirm()}>
-              Search
-            </Button>
-            <Button size="small" onClick={clearFilters}>
-              Reset
-            </Button>
-          </Space>
-        </div>
-      ),
-      onFilter: (value, record) =>
-        record.company_name.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Contact Person",
       dataIndex: "contact_person_name",
       key: "contact_person_name",
+      width: 180,
+      ellipsis: true,
       sorter: (a, b) =>
         a.contact_person_name.localeCompare(b.contact_person_name),
     },
@@ -152,39 +129,15 @@ const PartnerEnquiries = () => {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      width: 230,
+      ellipsis: true,
       sorter: (a, b) => a.email.localeCompare(b.email),
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div className="filter-dropdown">
-          <input
-            className="filter-input"
-            value={selectedKeys[0]}
-            onChange={(e) =>
-              setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            placeholder="Search email"
-          />
-          <Space>
-            <Button size="small" onClick={() => confirm()}>
-              Search
-            </Button>
-            <Button size="small" onClick={clearFilters}>
-              Reset
-            </Button>
-          </Space>
-        </div>
-      ),
-      onFilter: (value, record) =>
-        record.email.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Message",
       dataIndex: "message",
       key: "message",
+      width: 260,
       ellipsis: true,
       render: (message) => (
         <Text ellipsis style={{ maxWidth: 300 }}>
@@ -196,7 +149,7 @@ const PartnerEnquiries = () => {
       title: "Submitted On",
       dataIndex: "created_at",
       key: "created_at",
-      width: 180,
+      width: 195,
       render: (text) => new Date(text).toLocaleString(),
       sorter: (a, b) => new Date(a.created_at) - new Date(b.created_at),
       defaultSortOrder: "descend",
@@ -204,7 +157,7 @@ const PartnerEnquiries = () => {
     {
       title: "Actions",
       key: "actions",
-      width: 180,
+      width: 190,
       render: (_, record) => (
         <Space>
           <Button
@@ -234,56 +187,86 @@ const PartnerEnquiries = () => {
     },
   ];
 
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredEnquiries = normalizedSearch
+    ? enquiries.filter((enquiry) =>
+        [
+          enquiry.company_name,
+          enquiry.contact_person_name,
+          enquiry.email,
+          enquiry.message,
+        ].some((value) =>
+          String(value || "")
+            .toLowerCase()
+            .includes(normalizedSearch),
+        ),
+      )
+    : enquiries;
+
   return (
     <div className="page-container">
-      <Space direction="vertical" size="large" style={{ width: "100%", marginBottom: 16 }}>
-        <div className="page-actions">
-          <div className="page-header">
-            <h1 className="page-title">Partner Enquiries</h1>
-            <p className="page-subtitle">Manage partnership requests and inquiries</p>
+      <div className="page-header-card page-actions">
+        <div className="page-header">
+          <span className="page-kicker">Partner management</span>
+          <h1 className="page-title">Partner enquiries</h1>
+          <p className="page-subtitle">
+            Review partnership requests and track responses.
+          </p>
+        </div>
+        <Button onClick={fetchEnquiries} loading={loading}>
+          Refresh
+        </Button>
+      </div>
+
+      <div className="enquiry-summary-strip">
+        <div className="summary-strip-item">
+          <Text>Total enquiries</Text>
+          <strong>{enquiries.length}</strong>
+        </div>
+        <div className="summary-strip-item warning">
+          <Text>Pending</Text>
+          <strong>{enquiries.filter((e) => !e.responded).length}</strong>
+        </div>
+        <div className="summary-strip-item success">
+          <Text>Responded</Text>
+          <strong>{enquiries.filter((e) => e.responded).length}</strong>
+        </div>
+      </div>
+
+      <div className="table-card">
+        <div className="table-toolbar">
+          <div>
+            <h2>Enquiry inbox</h2>
+            <p>{filteredEnquiries.length} records shown</p>
           </div>
-          <Button onClick={fetchEnquiries} loading={loading}>
-            Refresh
-          </Button>
+          <Input
+            allowClear
+            prefix={<SearchOutlined />}
+            placeholder="Search company, contact, or email"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            className="table-search"
+          />
         </div>
 
-        <Card size="small" className="stats-card">
-          <div className="stats-wrapper">
-            <div className="stat-item">
-              <Text className="stat-label">Total Enquiries: </Text>
-              <Text className="stat-value">{enquiries.length}</Text>
-            </div>
-            <div className="stat-item">
-              <Text className="stat-label">Pending: </Text>
-              <Text className="stat-value stat-value-warning">
-                {enquiries.filter((e) => !e.responded).length}
-              </Text>
-            </div>
-            <div className="stat-item">
-              <Text className="stat-label">Responded: </Text>
-              <Text className="stat-value stat-value-success">
-                {enquiries.filter((e) => e.responded).length}
-              </Text>
-            </div>
-          </div>
-        </Card>
-      </Space>
-
-      <Table
-        columns={columns}
-        dataSource={enquiries.map((enquiry) => ({
-          ...enquiry,
-          key: enquiry.id,
-        }))}
-        loading={loading}
-        bordered
-        pagination={{
-          pageSize: 10,
-          showSizeChanger: true,
-          showTotal: (total, range) =>
-            `${range[0]}-${range[1]} of ${total} enquiries`,
-        }}
-      />
+        <Table
+          columns={columns}
+          dataSource={filteredEnquiries.map((enquiry) => ({
+            ...enquiry,
+            key: enquiry.id,
+          }))}
+          loading={loading}
+          bordered={false}
+          size="middle"
+          scroll={{ x: 1380 }}
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} of ${total} enquiries`,
+          }}
+        />
+      </div>
 
       <Modal
         title={

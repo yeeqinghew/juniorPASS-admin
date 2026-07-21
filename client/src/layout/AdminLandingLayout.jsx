@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ConfigProvider } from "antd";
 import { Outlet } from "react-router-dom";
 
@@ -46,7 +46,7 @@ const AdminLandingLayout = () => {
       <div
         style={{
           backgroundColor: "#FCFBF8",
-          height: "100vh",
+          minHeight: "100vh",
         }}
       >
         <Outlet />

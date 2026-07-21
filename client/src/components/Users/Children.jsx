@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Table, Space, Button, Input } from "antd";
+import { Input, Table } from "antd";
+import { SearchOutlined, TeamOutlined } from "@ant-design/icons";
 import toast from "react-hot-toast";
 import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 
 const Children = () => {
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const getChildren = async () => {
@@ -35,67 +37,62 @@ const Children = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      width: 320,
       sorter: (a, b) => a.name.localeCompare(b.name),
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div className="filter-dropdown">
-          <Input
-            className="filter-input"
-            value={selectedKeys[0]}
-            onChange={(e) =>
-              setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            placeholder="Search name"
-          />
-          <Space>
-            <Button onClick={() => confirm()} size="small" type="primary">
-              Search
-            </Button>
-            <Button onClick={clearFilters} size="small">
-              Reset
-            </Button>
-          </Space>
-        </div>
-      ),
-      onFilter: (value, record) =>
-        record.name.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: "Age",
       dataIndex: "age",
       key: "age",
+      width: 180,
       sorter: (a, b) => a.age - b.age,
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (text, record) => (
-        <Space size="middle">
-          <a className="action-link action-link-primary">Edit</a>
-          <a className="action-link action-link-danger">Delete</a>
-        </Space>
-      ),
     },
   ];
 
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredChildren = normalizedSearch
+    ? children.filter((child) =>
+        child.name?.toLowerCase().includes(normalizedSearch),
+      )
+    : children;
+
   return (
     <div className="page-container">
-      <div className="page-header">
-        <h1 className="page-title">Children</h1>
-        <p className="page-subtitle">Manage children profiles</p>
+      <div className="page-header-card">
+        <div className="page-header">
+          <span className="page-kicker">User management</span>
+          <h1 className="page-title">Children</h1>
+          <p className="page-subtitle">Review registered children profiles.</p>
+        </div>
+        <div className="page-record-count">
+          <TeamOutlined />
+          {children.length} {children.length === 1 ? "profile" : "profiles"}
+        </div>
       </div>
 
       <div className="table-card">
+        <div className="table-toolbar">
+          <div>
+            <h2>Children directory</h2>
+            <p>{filteredChildren.length} records shown</p>
+          </div>
+          <Input
+            allowClear
+            prefix={<SearchOutlined />}
+            placeholder="Search by name"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            className="table-search"
+          />
+        </div>
         <Table
           columns={columns}
-          dataSource={children}
+          dataSource={filteredChildren}
           rowKey="child_id"
           loading={loading}
           bordered={false}
+          size="middle"
+          scroll={{ x: 500 }}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,

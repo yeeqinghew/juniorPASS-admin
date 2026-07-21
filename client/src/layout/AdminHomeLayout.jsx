@@ -11,8 +11,17 @@ import {
   ShopOutlined,
   FormOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Image, Badge, Avatar, Typography, Space } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
+import {
+  Layout,
+  Menu,
+  Image,
+  Badge,
+  Avatar,
+  Typography,
+  Button,
+  Tooltip,
+} from "antd";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import logo from "../images/logopngResize.png";
 
 const { Header, Sider, Content } = Layout;
@@ -20,117 +29,200 @@ const { Text } = Typography;
 
 const AdminHomeLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const routeDetails = {
+    "/home": { key: "home", title: "Dashboard" },
+    "/parents": { key: "parents", title: "Parents" },
+    "/children": { key: "children", title: "Children" },
+    "/partners": { key: "partners", title: "Partners" },
+    "/create-partner": { key: "partners", title: "Invite Partner" },
+    "/partner-enquiries": { key: "enquiries", title: "Partner Enquiries" },
+  };
+
+  const currentRoute = routeDetails[location.pathname] || routeDetails["/home"];
+
+  const handleNavigation = ({ key }) => {
+    const routeMap = {
+      home: "/home",
+      parents: "/parents",
+      children: "/children",
+      partners: "/partners",
+      enquiries: "/partner-enquiries",
+    };
+
+    if (routeMap[key]) {
+      navigate(routeMap[key]);
+      setMobileOpen(false);
+    }
+  };
+
+  const handleToggle = () => {
+    if (isMobile) {
+      setMobileOpen((open) => !open);
+      return;
+    }
+
+    setCollapsed((value) => !value);
+  };
 
   return (
     <Layout className="admin-layout">
       <Sider
         collapsible
-        collapsed={collapsed}
+        collapsed={isMobile ? !mobileOpen : collapsed}
+        collapsedWidth={isMobile ? 0 : 80}
+        width={232}
         onCollapse={(value) => setCollapsed(value)}
+        breakpoint="lg"
+        onBreakpoint={(broken) => {
+          setIsMobile(broken);
+          if (broken) setMobileOpen(false);
+        }}
         trigger={null}
         theme="light"
-        className="sidebar"
+        className={`sidebar ${isMobile ? "sidebar-mobile" : ""}`}
       >
-        <div className={`sidebar-logo-wrapper ${collapsed ? 'collapsed' : 'expanded'}`}>
+        <div
+          className={`sidebar-logo-wrapper ${
+            !isMobile && collapsed ? "collapsed" : "expanded"
+          }`}
+        >
           <Image
             src={logo}
             preview={false}
-            width={collapsed ? 40 : 80}
+            width={!isMobile && collapsed ? 42 : 104}
             className="sidebar-logo"
           />
+          {(!collapsed || isMobile) && (
+            <Text className="sidebar-workspace-label">Admin workspace</Text>
+          )}
         </div>
 
         <Menu
           theme="light"
           mode="inline"
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={!collapsed ? ["2"] : []}
-          onClick={({ key }) => {
-            if (key === "1") navigate("/home");
-            if (key === "3") navigate("/parents");
-            if (key === "4") navigate("/children");
-            if (key === "5") navigate("/partners");
-            if (key === "7") navigate("/partner-enquiries");
-          }}
+          selectedKeys={[currentRoute.key]}
+          onClick={handleNavigation}
           className="sidebar-menu"
           items={[
             {
-              key: "1",
+              key: "home",
               icon: <HomeOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Dashboard</span>,
             },
             {
-              key: "2",
+              key: "parents",
               icon: <UserOutlined className="sidebar-menu-icon" />,
-              label: <span className="sidebar-menu-label">Users</span>,
-              children: [
-                {
-                  key: "3",
-                  icon: <TeamOutlined />,
-                  label: "Parents",
-                },
-                {
-                  key: "4",
-                  icon: <TeamOutlined />,
-                  label: "Children",
-                },
-              ],
+              label: <span className="sidebar-menu-label">Parents</span>,
             },
             {
-              key: "5",
+              key: "children",
+              icon: <TeamOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Children</span>,
+            },
+            {
+              key: "partners",
               icon: <ShopOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Partners</span>,
             },
             {
-              key: "7",
+              key: "enquiries",
               icon: <FormOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Partner Enquiries</span>,
             },
-            {
-              key: "6",
-              icon: <UploadOutlined className="sidebar-menu-icon" />,
-              label: <span className="sidebar-menu-label">Transactions</span>,
-            },
           ]}
         />
+
+        {(!collapsed || isMobile) && (
+          <div className="sidebar-footer">
+            <UploadOutlined />
+            <div>
+              <Text>Transactions</Text>
+              <small>Coming soon</small>
+            </div>
+          </div>
+        )}
       </Sider>
 
-      <Layout className={`main-layout ${collapsed ? 'sidebar-collapsed' : 'sidebar-expanded'}`}>
+      {isMobile && mobileOpen && (
+        <button
+          type="button"
+          className="sidebar-backdrop"
+          aria-label="Close navigation"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      <Layout
+        className={`main-layout ${
+          isMobile
+            ? "sidebar-mobile-layout"
+            : collapsed
+              ? "sidebar-collapsed"
+              : "sidebar-expanded"
+        }`}
+      >
         <Header className="main-header">
           <div className="header-left">
             {React.createElement(
-              collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+              isMobile || collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
               {
                 className: "header-toggle-icon",
-                onClick: () => setCollapsed(!collapsed),
+                onClick: handleToggle,
+                role: "button",
+                tabIndex: 0,
+                "aria-label": "Toggle navigation",
               }
             )}
-            <Text className="header-title">Admin Portal</Text>
+            <div className="header-page-context">
+              <Text className="header-eyebrow">JuniorPASS admin</Text>
+              <Text className="header-title">{currentRoute.title}</Text>
+            </div>
           </div>
 
-          <Space size="large" className="header-right">
-            <Badge count={5} offset={[-5, 5]}>
-              <BellOutlined
-                className="header-notification-icon"
+          <div className="header-right">
+            <Tooltip title="Notifications">
+              <Badge count={5} size="small" offset={[-3, 4]}>
+                <Button
+                  type="text"
+                  shape="circle"
+                  className="header-icon-button"
+                  icon={<BellOutlined />}
+                  aria-label="Notifications"
+                />
+              </Badge>
+            </Tooltip>
+
+            <div className="header-identity">
+              <Avatar
+                size={38}
+                className="header-avatar"
+                icon={<UserOutlined />}
+              />
+              <div className="header-identity-copy">
+                <Text strong>Administrator</Text>
+                <small>JuniorPASS</small>
+              </div>
+            </div>
+
+            <Tooltip title="Sign out">
+              <Button
+                type="text"
+                shape="circle"
+                className="header-icon-button header-logout-button"
+                icon={<LogoutOutlined />}
+                aria-label="Sign out"
                 onClick={() => {
-                  // TODO: Show notifications
+                  localStorage.removeItem("token");
+                  navigate("/");
                 }}
               />
-            </Badge>
-            <Avatar
-              size={40}
-              className="header-avatar"
-              icon={<UserOutlined />}
-            />
-            <LogoutOutlined
-              className="header-logout-icon"
-              onClick={() => {
-                localStorage.removeItem("token");
-                navigate("/");
-              }}
-            />
-          </Space>
+            </Tooltip>
+          </div>
         </Header>
         <Content className="main-content">
           <div className="fade-in">

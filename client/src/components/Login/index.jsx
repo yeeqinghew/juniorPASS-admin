@@ -1,22 +1,28 @@
-import React from "react";
+import { useState } from "react";
 import { Image } from "antd";
 import {
   LockOutlined,
   MailOutlined,
   EyeTwoTone,
   EyeInvisibleOutlined,
+  SafetyOutlined,
+  ArrowRightOutlined,
 } from "@ant-design/icons";
 import { Button, Form, Input, Typography } from "antd";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/logopngResize.png";
 import { API_ENDPOINTS } from "../../config/api";
+import "./Login.css";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = async (values) => {
+    setLoading(true);
     try {
       const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: "POST",
@@ -37,141 +43,100 @@ const AdminLogin = () => {
     } catch (error) {
       console.error(error.message);
       toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          margin: "auto",
-          background: "#f8f9fa",
-        }}
-      >
-        <div
-          style={{
-            width: "460px",
-            padding: "48px",
-            background: "#ffffff",
-            borderRadius: "16px",
-            border: "1px solid #e5e7eb",
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-          }}
-          className="fade-in"
-        >
-          <Toaster />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: "32px",
-            }}
-          >
-            <Image
-              src={logo}
-              preview={false}
-              width={100}
-            />
-          </div>
-
-          <Title
-            level={2}
-            style={{
-              textAlign: "center",
-              marginBottom: "8px",
-              color: "#1e293b",
-              fontWeight: "700",
-            }}
-          >
+    <section className="admin-login-page">
+      <Toaster />
+      <div className="admin-login-card fade-in">
+        <div className="admin-login-header">
+          <Image
+            src={logo}
+            preview={false}
+            width={126}
+            className="admin-login-logo"
+          />
+          <Title level={2} className="admin-login-title">
             Admin Portal
           </Title>
-          <p style={{ textAlign: "center", color: "#64748b", marginBottom: "40px", fontSize: "15px" }}>
+          <Text className="admin-login-subtitle">
             Sign in to manage your platform
-          </p>
+          </Text>
+        </div>
 
-          <Form
-            name="normal_login"
-            className="login-form"
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={handleLogin}
+        <Form
+          name="normal_login"
+          className="admin-login-form"
+          onFinish={handleLogin}
+          layout="vertical"
+          requiredMark={false}
+        >
+          <Form.Item
+            name="username"
+            label="Username"
+            rules={[
+              {
+                required: true,
+                message: "Please enter your username",
+              },
+            ]}
           >
-            <Form.Item
-              name="username"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your username!",
-                },
-              ]}
-            >
-              <Input
-                prefix={<MailOutlined style={{ color: "#94a3b8" }} />}
-                placeholder="Username"
-                size="large"
-                style={{
-                  borderRadius: "12px",
-                  fontSize: "16px",
-                  padding: "12px 16px",
-                  border: "1px solid #e5e7eb",
-                }}
-              />
-            </Form.Item>
+            <Input
+              prefix={<MailOutlined />}
+              placeholder="Enter your username"
+              size="large"
+              autoComplete="username"
+            />
+          </Form.Item>
 
-            <Form.Item
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Password!",
-                },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined style={{ color: "#94a3b8" }} />}
-                type="password"
-                placeholder="Password"
-                size="large"
-                style={{
-                  borderRadius: "12px",
-                  fontSize: "16px",
-                  padding: "12px 16px",
-                  border: "1px solid #e5e7eb",
-                }}
-                iconRender={(visible) =>
-                  visible ? <EyeTwoTone twoToneColor="#98BDD2" /> : <EyeInvisibleOutlined />
-                }
-              />
-            </Form.Item>
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[
+              {
+                required: true,
+                message: "Please enter your password",
+              },
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Enter your password"
+              size="large"
+              autoComplete="current-password"
+              iconRender={(visible) =>
+                visible ? (
+                  <EyeTwoTone twoToneColor="#98BDD2" />
+                ) : (
+                  <EyeInvisibleOutlined />
+                )
+              }
+            />
+          </Form.Item>
 
-            <Form.Item style={{ marginTop: "32px" }}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                size="large"
-                block
-                style={{
-                  borderRadius: "12px",
-                  height: "52px",
-                  fontSize: "16px",
-                  fontWeight: "600",
-                  background: "#98BDD2",
-                  border: "none",
-                }}
-              >
-                Sign In
-              </Button>
-            </Form.Item>
-          </Form>
+          <Form.Item className="admin-login-submit">
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              loading={loading}
+              icon={<ArrowRightOutlined />}
+              iconPosition="end"
+            >
+              {loading ? "Signing in..." : "Sign in"}
+            </Button>
+          </Form.Item>
+        </Form>
+
+        <div className="admin-login-footer">
+          <Text>JuniorPASS administration workspace</Text>
         </div>
       </div>
-    </>
+    </section>
   );
 };
 

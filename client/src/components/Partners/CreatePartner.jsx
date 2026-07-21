@@ -67,21 +67,22 @@ const CreatePartner = () => {
 
   return (
     <div className="page-container">
-      {/* Header */}
-      <div className="page-header-left">
+      <div className="page-header-card page-actions">
+        <div className="page-header">
+          <span className="page-kicker">Partner management</span>
+          <Title level={2} className="page-title">
+            Invite new partner
+          </Title>
+          <Text className="page-subtitle">
+            Send an invitation email to onboard a new partner organisation.
+          </Text>
+        </div>
         <Button
           icon={<ArrowLeftOutlined />}
           onClick={() => navigate("/partners")}
-          style={{ marginBottom: 16 }}
         >
-          Back to Partners
+          Back to partners
         </Button>
-        <Title level={2} className="page-title" style={{ marginBottom: 8 }}>
-          Invite New Partner
-        </Title>
-        <Text className="page-subtitle" style={{ display: "block", marginBottom: 24 }}>
-          Send an invitation email to onboard a new partner organization
-        </Text>
       </div>
 
       {/* Main Content - Left Aligned */}

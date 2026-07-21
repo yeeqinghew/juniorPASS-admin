@@ -1,0 +1,136 @@
+.admin-login-page {
+  display: grid;
+  min-height: 100vh;
+  padding: var(--space-6);
+  place-items: center;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(243, 165, 199, 0.16), transparent 24rem),
+    radial-gradient(circle at 90% 86%, rgba(152, 189, 210, 0.2), transparent 26rem),
+    #FCFBF8;
+}
+
+.admin-login-card {
+  width: min(500px, 100%);
+  padding: 44px 50px;
+  background: var(--bg-secondary);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-login-header {
+  margin-bottom: var(--space-7);
+  text-align: center;
+}
+
+.admin-login-logo {
+  display: block;
+  margin: 0 auto var(--space-5);
+}
+
+.admin-login-title.ant-typography {
+  margin: 0 0 var(--space-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-4xl);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.03em;
+}
+
+.admin-login-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.admin-login-form .ant-form-item {
+  margin-bottom: var(--space-5);
+}
+
+.admin-login-form .ant-form-item-label {
+  padding-bottom: 7px;
+}
+
+.admin-login-form .ant-form-item-label>label {
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.admin-login-form .ant-input-affix-wrapper {
+  min-height: 50px;
+  padding: 8px 14px;
+  background: #FCFBF8;
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: none;
+}
+
+.admin-login-form .ant-input-affix-wrapper:hover,
+.admin-login-form .ant-input-affix-wrapper-focused {
+  border-color: var(--color-primary);
+}
+
+.admin-login-form .ant-input-affix-wrapper-focused {
+  background: var(--bg-secondary);
+  box-shadow: 0 0 0 3px rgba(152, 189, 210, 0.15);
+}
+
+.admin-login-form .ant-input-prefix {
+  margin-right: 9px;
+  color: var(--text-tertiary);
+}
+
+.admin-login-submit.ant-form-item {
+  margin-top: var(--space-7);
+  margin-bottom: 0;
+}
+
+.admin-login-submit .ant-btn {
+  height: 50px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  border: 0;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(152, 189, 210, 0.3);
+}
+
+.admin-login-submit .ant-btn:hover {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)) !important;
+  box-shadow: 0 8px 20px rgba(152, 189, 210, 0.45);
+  transform: translateY(-1px);
+}
+
+.admin-login-footer {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  text-align: center;
+  border-top: var(--border-width) solid var(--border-color-light);
+}
+
+.admin-login-footer .ant-typography {
+  color: var(--text-tertiary);
+  font-size: 10px;
+}
+
+@media (max-width: 520px) {
+  .admin-login-page {
+    padding: 0;
+    background: var(--bg-secondary);
+  }
+
+  .admin-login-card {
+    min-height: 100vh;
+    padding: 36px 24px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .admin-login-header {
+    margin-top: auto;
+  }
+
+  .admin-login-title.ant-typography {
+    font-size: var(--font-size-3xl);
+  }
+}
