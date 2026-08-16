@@ -1,0 +1,15 @@
+.settings-page {
+  max-width: 860px;
+}
+
+.settings-card {
+  margin-top: 24px;
+}
+
+.settings-form {
+  margin-top: 24px;
+}
+
+.settings-form .ant-input-number {
+  width: 220px;
+}

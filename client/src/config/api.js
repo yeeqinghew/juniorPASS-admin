@@ -25,6 +25,8 @@ export const API_ENDPOINTS = {
 
   // Categories
   GET_ALL_CATEGORIES: `${API_BASE_URL}/categories`,
+
+  CREDIT_CONVERSION: `${API_BASE_URL}/admins/settings/credit-conversion`,
 };
 
 // Helper function for authenticated fetch
