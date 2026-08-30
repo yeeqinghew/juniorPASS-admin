@@ -1,7 +1,17 @@
 // API Configuration
 import { AUTH_ROLES } from "../constants/auth";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const getApiBaseURL = () => {
+  // Use a same-origin API only on the staging admin hostname. The Vercel
+  // routing rule for that host proxies these calls to the Railway backend.
+  if (window.location.hostname === "staging.admin.juniorpass.sg") {
+    return window.location.origin;
+  }
+
+  return import.meta.env.VITE_API_URL || "http://localhost:5000";
+};
+
+const API_BASE_URL = getApiBaseURL();
 
 // API endpoints
 export const API_ENDPOINTS = {
