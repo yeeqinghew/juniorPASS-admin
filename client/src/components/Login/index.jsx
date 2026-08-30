@@ -12,7 +12,7 @@ import { Button, Form, Input, Typography } from "antd";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import logo from "../../images/logopngResize.png";
-import { API_ENDPOINTS } from "../../config/api";
+import { API_ENDPOINTS, fetchWithAuth } from "../../config/api";
 import "./Login.css";
 
 const { Title, Text } = Typography;
@@ -24,17 +24,13 @@ const AdminLogin = () => {
   const handleLogin = async (values) => {
     setLoading(true);
     try {
-      const response = await fetch(API_ENDPOINTS.LOGIN, {
+      const response = await fetchWithAuth(API_ENDPOINTS.LOGIN, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(values),
       });
 
       const parseRes = await response.json();
-      if (parseRes.token) {
-        localStorage.setItem("token", parseRes.token);
+      if (response.ok && parseRes.authenticated) {
         navigate("/home");
         toast.success("Login successfully");
       } else {

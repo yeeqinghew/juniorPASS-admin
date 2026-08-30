@@ -350,3 +350,9 @@
     padding: var(--space-4);
   }
 }
+.admin-auth-loading {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  background: var(--bg-primary, #fcfbf8);
+}

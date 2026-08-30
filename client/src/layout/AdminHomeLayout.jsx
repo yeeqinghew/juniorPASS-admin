@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   UploadOutlined,
   UserOutlined,
@@ -20,10 +20,12 @@ import {
   Avatar,
   Typography,
   Button,
+  Spin,
   Tooltip,
 } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import logo from "../images/logopngResize.png";
+import { API_ENDPOINTS, fetchWithAuth } from "../config/api";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -34,6 +36,30 @@ const AdminHomeLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+
+    const verifySession = async () => {
+      try {
+        const response = await fetchWithAuth(API_ENDPOINTS.VERIFY_AUTH);
+        if (!response.ok) {
+          navigate("/login", { replace: true });
+        }
+      } catch (error) {
+        console.error("Admin session verification failed:", error);
+        navigate("/login", { replace: true });
+      } finally {
+        if (active) setAuthChecking(false);
+      }
+    };
+
+    verifySession();
+    return () => {
+      active = false;
+    };
+  }, [navigate]);
 
   const routeDetails = {
     "/home": { key: "home", title: "Dashboard" },
@@ -71,6 +97,14 @@ const AdminHomeLayout = () => {
 
     setCollapsed((value) => !value);
   };
+
+  if (authChecking) {
+    return (
+      <div className="admin-auth-loading">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   return (
     <Layout className="admin-layout">
@@ -224,9 +258,16 @@ const AdminHomeLayout = () => {
                 className="header-icon-button header-logout-button"
                 icon={<LogoutOutlined />}
                 aria-label="Sign out"
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  navigate("/");
+                onClick={async () => {
+                  try {
+                    await fetchWithAuth(API_ENDPOINTS.LOGOUT, {
+                      method: "POST",
+                    });
+                  } catch (error) {
+                    console.error("Admin logout failed:", error);
+                  } finally {
+                    navigate("/login", { replace: true });
+                  }
                 }}
               />
             </Tooltip>

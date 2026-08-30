@@ -1,10 +1,14 @@
 // API Configuration
+import { AUTH_ROLES } from "../constants/auth";
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // API endpoints
 export const API_ENDPOINTS = {
   // Admin Auth
   LOGIN: `${API_BASE_URL}/admins/login`,
+  VERIFY_AUTH: `${API_BASE_URL}/admins/is-verify`,
+  LOGOUT: `${API_BASE_URL}/admins/logout`,
 
   // Parents
   GET_ALL_PARENTS: `${API_BASE_URL}/admins/getAllParents`,
@@ -31,15 +35,14 @@ export const API_ENDPOINTS = {
 
 // Helper function for authenticated fetch
 export const fetchWithAuth = async (url, options = {}) => {
-  const token = localStorage.getItem("token");
-
   const defaultHeaders = {
     "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
+    "X-Auth-Role": AUTH_ROLES.ADMIN,
   };
 
   const config = {
     ...options,
+    credentials: "include",
     headers: {
       ...defaultHeaders,
       ...options.headers,
