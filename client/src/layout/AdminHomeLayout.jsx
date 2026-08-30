@@ -16,7 +16,6 @@ import {
   Layout,
   Menu,
   Image,
-  Badge,
   Avatar,
   Typography,
   Button,
@@ -228,15 +227,13 @@ const AdminHomeLayout = () => {
 
           <div className="header-right">
             <Tooltip title="Notifications">
-              <Badge count={5} size="small" offset={[-3, 4]}>
-                <Button
-                  type="text"
-                  shape="circle"
-                  className="header-icon-button"
-                  icon={<BellOutlined />}
-                  aria-label="Notifications"
-                />
-              </Badge>
+              <Button
+                type="text"
+                shape="circle"
+                className="header-icon-button"
+                icon={<BellOutlined />}
+                aria-label="Notifications"
+              />
             </Tooltip>
 
             <div className="header-identity">
