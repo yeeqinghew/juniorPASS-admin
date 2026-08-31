@@ -9,6 +9,7 @@ import Parents from "../components/Users/Parents";
 import Children from "../components/Users/Children";
 import PartnerEnquiries from "../components/PartnerEnquiries";
 import Settings from "../components/Settings";
+import Categories from "../components/Categories";
 
 const Routers = () => {
   return (
@@ -28,6 +29,7 @@ const Routers = () => {
             <Route path="children" element={<Children />}></Route>
             <Route path="partners" element={<Partners />}></Route>
             <Route path="settings" element={<Settings />}></Route>
+            <Route path="categories" element={<Categories />}></Route>
             <Route path="create-partner" element={<CreatePartner />}></Route>
             <Route
               path="partner-enquiries"

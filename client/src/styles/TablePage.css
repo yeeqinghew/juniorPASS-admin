@@ -216,6 +216,12 @@
   text-decoration: underline;
 }
 
+.category-slug {
+  margin-top: 2px;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-xs);
+}
+
 .enquiry-summary-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

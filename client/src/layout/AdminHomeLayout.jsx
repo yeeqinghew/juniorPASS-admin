@@ -11,6 +11,7 @@ import {
   ShopOutlined,
   FormOutlined,
   SettingOutlined,
+  TagsOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
@@ -68,6 +69,7 @@ const AdminHomeLayout = () => {
     "/create-partner": { key: "partners", title: "Invite Partner" },
     "/partner-enquiries": { key: "enquiries", title: "Partner Enquiries" },
     "/settings": { key: "settings", title: "Platform Settings" },
+    "/categories": { key: "categories", title: "Categories" },
   };
 
   const currentRoute = routeDetails[location.pathname] || routeDetails["/home"];
@@ -80,6 +82,7 @@ const AdminHomeLayout = () => {
       partners: "/partners",
       enquiries: "/partner-enquiries",
       settings: "/settings",
+      categories: "/categories",
     };
 
     if (routeMap[key]) {
@@ -169,6 +172,11 @@ const AdminHomeLayout = () => {
               key: "enquiries",
               icon: <FormOutlined className="sidebar-menu-icon" />,
               label: <span className="sidebar-menu-label">Partner Enquiries</span>,
+            },
+            {
+              key: "categories",
+              icon: <TagsOutlined className="sidebar-menu-icon" />,
+              label: <span className="sidebar-menu-label">Categories</span>,
             },
             {
               key: "settings",

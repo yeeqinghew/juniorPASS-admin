@@ -38,7 +38,9 @@ export const API_ENDPOINTS = {
     `${API_BASE_URL}/admins/markEnquiryResponded/${enquiryId}`,
 
   // Categories
-  GET_ALL_CATEGORIES: `${API_BASE_URL}/categories`,
+  GET_ALL_CATEGORIES: `${API_BASE_URL}/categories/admin`,
+  CREATE_CATEGORY: `${API_BASE_URL}/categories`,
+  UPDATE_CATEGORY: (categoryId) => `${API_BASE_URL}/categories/${categoryId}`,
 
   CREDIT_CONVERSION: `${API_BASE_URL}/admins/settings/credit-conversion`,
 };
